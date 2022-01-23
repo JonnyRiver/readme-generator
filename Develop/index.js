@@ -5,18 +5,18 @@ const inquirer = require ('inquirer');
 const generateMarkdown = require('./utils/generateMarkdown');
 
 
-console.log('Welcome to the README GENERATOR!')
-console.log ("Please answer the questions to generate your README file!")
+console.log('Welcome to the README GENERATOR!');
+console.log ("Please answer the questions to generate your README file!");
 
 
 // TODO: Create an array of questions for user input
 
-const questions = () => {
+const data = () => {
     return inquirer.prompt ([
         {
           type: 'input',
           name: 'title',
-          message: 'What is the title of you project?',
+          message: 'What is the title of you project? ',
           validate: title => {
               if (title) {
                   return true;
@@ -30,7 +30,7 @@ const questions = () => {
         {
             type: 'input',
             name: 'github',
-            message: 'Enter your Github Username',
+            message: 'Enter your Github Username: ',
             validate: gitHubInput => {
                 if(gitHubInput) {
                     return true;
@@ -43,7 +43,7 @@ const questions = () => {
         {
             type: 'input',
             name: 'description',
-            message: 'Enter a description of your project',
+            message: 'Enter a description of your project: ',
             validate: description => {
                 if(description){
                     return true;
@@ -56,7 +56,7 @@ const questions = () => {
         {
             type: 'input',
             name: 'email',
-            message: 'Enter your Email',
+            message: 'Enter your Email: ',
             validate: userEmail => {
                 if(userEmail){
                     return true;
@@ -69,7 +69,7 @@ const questions = () => {
         {
             type: 'input',
             name: 'install',
-            message: 'What steps are required to install your project?',
+            message: 'What steps are required to install your project? ',
             validate: install => {
                 if(install){
                     return true;
@@ -82,7 +82,7 @@ const questions = () => {
         {
             type: 'input',
             name: 'usage',
-            message: 'How does someone use this project?',
+            message: 'How does someone use this project? ',
             validate: usage => {
                 if(usage){
                     return true;
@@ -91,46 +91,26 @@ const questions = () => {
                     return false;
                 }
             }
-        }
-
+        },
+        
     ])
 };
 
-const promptProject = data => {
-    console.log (data)
-}
+
 
 // TODO: Create a function to write README file
-// function writeToFile(README,data) {
-    
-const writeFile = data => {
-    fs.writeFile('./README.md', data, err =>{
-    if (err) {
-        console.log (err);
-        return;
-    } else {
-        console.log ('Your README generated!');
-}});
-};
+function writeToFile(fileName, data) {
+        fs.appendFile(`./README.md`, data, (err) => err ? console.error(err) : console.log (`README.md has been generated.`))};
+
+
 
 
 // TODO: Create a function to initialize app
-// function init (questions) {
-//     inquirer.prompt()
-//     .then(function(userInput) {
-//         console.log (userInput)
-//         writeToFile('README.md', generateMarkdown(userInput));
-//     });
-// };
+async function init() {
+    let answers = await data();
+    writeToFile((answers.fileName),(generateMarkdown(answers)))
+};
 
 
 // Function call to initialize app 
-
-// init();
-
-questions()
-.then(promptProject)
-.then(portfolioData => {
-    console.log (portfolioData);
-
-});
+init()
